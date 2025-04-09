@@ -27,10 +27,13 @@ export function alertaRedireccion(redireccion, titulo, mensaje, icono, url) {
             timerInterval = setInterval(() => {
             timer.textContent = `${Swal.getTimerLeft()}`;
             }, 100);
-    },
-    willClose: () => {
-        clearInterval(timerInterval);
-        redireccion(url)
-    }
-})
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+            redireccion(url)
+        }
+    })
+}
+export function generarToken(){
+    return Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10)
 }

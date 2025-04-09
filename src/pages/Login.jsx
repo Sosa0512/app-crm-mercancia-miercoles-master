@@ -2,7 +2,8 @@
 /* rfce -> Crea un componente funcional regular */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { alertaError, alertaRedireccion } from '../helpers/funciones'
+import { alertaError, alertaRedireccion, generarToken } from '../helpers/funciones'
+import { usuarios } from '../services/database'
 import './Login.css'
 const Login = () => {
   const [getUsuario, setUsuario] = useState("")
@@ -10,9 +11,19 @@ const Login = () => {
   const [getHoraLogin, setHoraLogin] = useState(null)
   let navigate = useNavigate()
 
+  console.log(generarToken());
+
+  function buscarUsuario() {
+    let usuarioEncontrado = usuarios.find((usuario)=> getUsuario == usuario.usuario && getPassword == usuario.contraseña)
+    return usuarioEncontrado
+  }
+
   function inicioSesion() {
-    if (getUsuario === "admin" && getPassword === "admin") {
-      alertaRedireccion(navigate, "Bienvenido" + getUsuario, "En breves segundos será redireccionado al home", "success", "/home")
+    if (buscarUsuario()) {
+      let tokenAcceso = generarToken()
+      localStorage.setItem("token", tokenAcceso)
+      alertaRedireccion(navigate, "Bienvenido" + buscarUsuario().nombre, "En breves segundos será redireccionado al home",
+      "success", "/home")
       let horaInicio = new Date()
       console.log(horaInicio);
       // setHoraLogin(horaInicio)
